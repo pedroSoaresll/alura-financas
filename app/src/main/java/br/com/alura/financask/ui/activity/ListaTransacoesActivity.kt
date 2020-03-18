@@ -25,22 +25,7 @@ class ListaTransacoesActivity : AppCompatActivity() {
 
         configuraLista()
 
-        lista_transacoes_adiciona_receita.setOnClickListener {
-            criaAdicionaTransacaoDialog(Tipo.RECEITA)
-        }
-
-        lista_transacoes_adiciona_despesa.setOnClickListener {
-            criaAdicionaTransacaoDialog(Tipo.DESPESA)
-        }
-    }
-
-    private fun criaAdicionaTransacaoDialog(tipo: Tipo) {
-        AdicionaTransacaoDialog(this, window.decorView as ViewGroup).configuraDialog(tipo, object : TransacaoDelegate {
-            override fun delegate(transacao: Transacao) {
-                atualizaTransacoes(transacao)
-                lista_transacoes_adiciona_menu.close(true)
-            }
-        })
+        configuraFab()
     }
 
     private fun atualizaTransacoes(transacao: Transacao) {
@@ -52,6 +37,25 @@ class ListaTransacoesActivity : AppCompatActivity() {
 
     private fun configuraLista() {
         lista_transacoes_listview.adapter = ListaTransacoesAdapter(transacoes, this)
+    }
+
+    private fun configuraFab() {
+        lista_transacoes_adiciona_receita.setOnClickListener {
+            criaAdicionaTransacaoDialog(Tipo.RECEITA)
+        }
+
+        lista_transacoes_adiciona_despesa.setOnClickListener {
+            criaAdicionaTransacaoDialog(Tipo.DESPESA)
+        }
+    }
+
+    private fun criaAdicionaTransacaoDialog(tipo: Tipo) {
+        AdicionaTransacaoDialog(this, window.decorView as ViewGroup).chama(tipo, object : TransacaoDelegate {
+            override fun delegate(transacao: Transacao) {
+                atualizaTransacoes(transacao)
+                lista_transacoes_adiciona_menu.close(true)
+            }
+        })
     }
 
     private fun configuraResumo() {
