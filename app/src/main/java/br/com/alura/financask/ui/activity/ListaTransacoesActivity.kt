@@ -50,12 +50,15 @@ class ListaTransacoesActivity : AppCompatActivity() {
     }
 
     private fun criaAdicionaTransacaoDialog(tipo: Tipo) {
-        AdicionaTransacaoDialog(this, window.decorView as ViewGroup).chama(tipo, object : TransacaoDelegate {
-            override fun delegate(transacao: Transacao) {
-                atualizaTransacoes(transacao)
-                lista_transacoes_adiciona_menu.close(true)
-            }
-        })
+        AdicionaTransacaoDialog(this, window.decorView as ViewGroup).chama(
+                tipo,
+                object : TransacaoDelegate {
+                    override fun delegate(transacao: Transacao) {
+                        atualizaTransacoes(transacao)
+                        lista_transacoes_adiciona_menu.close(true)
+                    }
+                }
+        )
     }
 
     private fun configuraResumo() {
