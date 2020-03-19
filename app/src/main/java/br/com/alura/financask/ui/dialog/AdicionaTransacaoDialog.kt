@@ -21,6 +21,9 @@ import java.util.*
 
 class AdicionaTransacaoDialog(private val context: Context, private val view: ViewGroup) {
     private val viewCriada = criaLayout()
+    private val campoData = viewCriada.form_transacao_data
+    private val campoCategoria = viewCriada.form_transacao_categoria
+    private val campoValor = viewCriada.form_transacao_valor
 
     private fun criaLayout(): View {
         return LayoutInflater.from(context)
@@ -41,14 +44,14 @@ class AdicionaTransacaoDialog(private val context: Context, private val view: Vi
         val mes = hoje.get(Calendar.MONTH)
         val dia = hoje.get(Calendar.DAY_OF_MONTH)
 
-        viewCriada.form_transacao_data.setText(hoje.formataParaBrasileiro())
+        campoData.setText(hoje.formataParaBrasileiro())
 
-        viewCriada.form_transacao_data.setOnClickListener {
+        campoData.setOnClickListener {
             DatePickerDialog(context, DatePickerDialog.OnDateSetListener { _, ano, mes, dia ->
                 val dataSelecionada = Calendar.getInstance()
 
                 dataSelecionada.set(ano, mes, dia)
-                viewCriada.form_transacao_data.setText(dataSelecionada.formataParaBrasileiro())
+                campoData.setText(dataSelecionada.formataParaBrasileiro())
             }, ano, mes, dia).show()
         }
     }
@@ -64,7 +67,7 @@ class AdicionaTransacaoDialog(private val context: Context, private val view: Vi
                 categorias,
                 android.R.layout.simple_spinner_dropdown_item)
 
-        viewCriada.form_transacao_categoria.adapter = adapter
+        campoCategoria.adapter = adapter
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -79,12 +82,10 @@ class AdicionaTransacaoDialog(private val context: Context, private val view: Vi
                 .setTitle(titulo)
                 .setView(viewCriada)
                 .setPositiveButton("Adicionar") { _, _ ->
-                    val valorEmTexto = viewCriada.form_transacao_valor.text.toString()
-                    val dataEmTexto = viewCriada.form_transacao_data.text.toString()
-                    val categoriaEmTexto = viewCriada.form_transacao_categoria.selectedItem.toString()
-
+                    val valorEmTexto = campoValor.text.toString()
+                    val dataEmTexto = campoData.text.toString()
+                    val categoriaEmTexto = campoCategoria.selectedItem.toString()
                     val valor = converteCampoValor(valorEmTexto)
-
                     val data = dataEmTexto.converteParaCalendar()
 
                     val transacaoCriada = Transacao(tipo = tipo,
