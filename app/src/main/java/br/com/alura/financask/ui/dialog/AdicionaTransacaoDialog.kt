@@ -47,7 +47,7 @@ class AdicionaTransacaoDialog(private val context: Context, private val view: Vi
         campoData.setText(hoje.formataParaBrasileiro())
 
         campoData.setOnClickListener {
-            DatePickerDialog(context, DatePickerDialog.OnDateSetListener { _, ano, mes, dia ->
+            DatePickerDialog(context, { _, ano, mes, dia ->
                 val dataSelecionada = Calendar.getInstance()
 
                 dataSelecionada.set(ano, mes, dia)
@@ -57,11 +57,7 @@ class AdicionaTransacaoDialog(private val context: Context, private val view: Vi
     }
 
     private fun configuraCampoCategoria(tipo: Tipo) {
-        val categorias = if (tipo == Tipo.RECEITA) {
-            R.array.categorias_de_receita
-        } else {
-            R.array.categorias_de_despesa
-        }
+        val categorias = categoriaPor(tipo)
 
         val adapter = ArrayAdapter.createFromResource(context,
                 categorias,
@@ -70,13 +66,17 @@ class AdicionaTransacaoDialog(private val context: Context, private val view: Vi
         campoCategoria.adapter = adapter
     }
 
+    private fun categoriaPor(tipo: Tipo): Int {
+        return if (tipo == Tipo.RECEITA) {
+            R.array.categorias_de_receita
+        } else {
+            R.array.categorias_de_despesa
+        }
+    }
+
     @SuppressLint("SimpleDateFormat")
     private fun configuraFormulario(tipo: Tipo, transacaoDelegate: TransacaoDelegate) {
-        val titulo = if (tipo == Tipo.RECEITA) {
-            R.string.adiciona_receita
-        } else {
-            R.string.adiciona_despesa
-        }
+        val titulo = tituloPor(tipo)
 
         AlertDialog.Builder(context)
                 .setTitle(titulo)
@@ -97,6 +97,14 @@ class AdicionaTransacaoDialog(private val context: Context, private val view: Vi
                 }
                 .setNegativeButton("Cancelar", null)
                 .show()
+    }
+
+    private fun tituloPor(tipo: Tipo): Int {
+        return if (tipo == Tipo.RECEITA) {
+            R.string.adiciona_receita
+        } else {
+            R.string.adiciona_despesa
+        }
     }
 
     private fun converteCampoValor(valorEmTexto: String): BigDecimal {
